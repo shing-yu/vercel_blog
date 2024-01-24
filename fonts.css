@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'JetBrains Mono';
     font-display: swap;
-    src: url('https://cdn.jsdelivr.net/gh/shing-yu/myfonts@main/JetBrainsMonoRegular.woff2') format("woff2");
+    src: url('https://img.shingyu.cn/JetBrainsMonoRegular.woff2') format("woff2");
 }
 
 @font-face {
     font-family: 'HarmonyOS Sans SC';
     font-display: swap;
-    src: url('https://cdn.jsdelivr.net/gh/IKKI2000/harmonyos-fonts@main/fonts/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.woff2') format("woff2");
+    src: url('https://img.shingyu.cn/HarmonyOS_Sans_SC_Regular.woff2') format("woff2");
 }
