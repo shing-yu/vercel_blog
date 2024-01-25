@@ -153,7 +153,7 @@
         }
       }
       detectApple()
-    })(window)</script><link rel="stylesheet" href="/fonts.css"><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+    })(window)</script><link rel="stylesheet" href="/fonts.css"><meta name="generator" content="Hexo 7.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
   const $loadingBox = document.getElementById('loading-box')
   const $body = document.body
   const preloader = {
@@ -179,7 +179,7 @@
 <h2 id="二-理论"><a href="#二-理论" class="headerlink" title="二.理论"></a>二.理论</h2><h3 id="1-ARP是什么"><a href="#1-ARP是什么" class="headerlink" title="1.ARP是什么"></a>1.ARP是什么</h3><p>这里引用CSDN上的一篇博客作说明</p>
 <blockquote>
 <p>ARP是Address Resolution Protocol（地址解析协议）的缩写。在以太网中，两台机器想要通信，就必须知道目标主机得MAC地址，而ARP协议的作用就是获取MAC。ARP协议的基本功能就是在主机发送数据之前将IP地址转换为MAC地址，完成网络地址到物理地址的映射。</p>
-<p>ARP缓存表<br>任何一台主机安装了TCP/IP协议都有ARP缓存表，该表保存了局域网中个主机IP对应的MAC地址，ARP缓存表能够有效地保证数据传输的一对一特性。在Windows中可以使用arp -a来查看缓存表。<br>ARP缓存表中的数据是有时效性的，在超过指定的时间后，将从缓存中删除它们，Windows中默认的存活时间为两分钟。</p>
+<p>ARP缓存表<br>任何一台主机安装了TCP&#x2F;IP协议都有ARP缓存表，该表保存了局域网中个主机IP对应的MAC地址，ARP缓存表能够有效地保证数据传输的一对一特性。在Windows中可以使用arp -a来查看缓存表。<br>ARP缓存表中的数据是有时效性的，在超过指定的时间后，将从缓存中删除它们，Windows中默认的存活时间为两分钟。</p>
 </blockquote>
 <p><strong>局域网主机通信过程</strong><br>（B为局域网内主机；C为局域网外主机，也可视作公网主机）</p>
 <blockquote>
@@ -226,6 +226,13 @@
       path: window.location.pathname,
       comment: false,
     }, {"requiredMeta":["nick","mail"],"locale":{"placeholder":"1.昵称和邮箱为必填项。\n2.在昵称中使用QQ号或使用QQ邮箱，可以自动匹配头像哦~\n3.邮箱用于接收回复提醒，不会公开；如果您没有收到邮件通知，请检查邮箱的垃圾邮件。\n4.每分钟只能发送一次评论哦~"}}))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+
   }
 
   const loadWaline = async () => {
