@@ -1,0 +1,624 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>番茄下载器网页版v4版本部署教程 | 星隅の小站</title><meta name="author" content="星隅"><meta name="copyright" content="星隅"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="番茄下载器网页版（API）v4版本部署教程项目地址：fanqie-downloader-api-v4 此文章为以上项目的部署教程，包括Docker部署和直接部署两种方式 右侧边栏可找到目录，点击跳转到对应章节 Docker部署（推荐）p.s. 如果镜像拉取缓慢，可参考 配置镜像加速器_容器镜像服务(ACR)-阿里云帮助中心 (aliyun.com) 进行加速 无MySQL如果你没有MySQL服务，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="番茄下载器网页版v4版本部署教程">
+<meta property="og:url" content="https://www.shingyu.cn/posts/b4de337aa505/index.html">
+<meta property="og:site_name" content="星隅の小站">
+<meta property="og:description" content="番茄下载器网页版（API）v4版本部署教程项目地址：fanqie-downloader-api-v4 此文章为以上项目的部署教程，包括Docker部署和直接部署两种方式 右侧边栏可找到目录，点击跳转到对应章节 Docker部署（推荐）p.s. 如果镜像拉取缓慢，可参考 配置镜像加速器_容器镜像服务(ACR)-阿里云帮助中心 (aliyun.com) 进行加速 无MySQL如果你没有MySQL服务，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.shingyu.cn/zw1.jpg">
+<meta property="article:published_time" content="2024-03-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-06T16:14:11.455Z">
+<meta property="article:author" content="星隅">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="小说">
+<meta property="article:tag" content="部署">
+<meta property="article:tag" content="txt">
+<meta property="article:tag" content="阅读">
+<meta property="article:tag" content="自制项目">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Flask">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.shingyu.cn/zw1.jpg"><link rel="shortcut icon" href="https://img.shingyu.cn/favicon.png"><link rel="canonical" href="https://www.shingyu.cn/posts/b4de337aa505/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="baidu-site-verification" content="codeva-HfPhtCnN4C"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"这篇文章最后更新于","messageNext":"天前，其中的某些内容可能已经过时；请谨慎辨别，优先查看最新文章。"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 星隅","link":"链接: ","source":"来源: 星隅の小站","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '番茄下载器网页版v4版本部署教程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-07 00:14:11'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/fonts.css"><meta name="generator" content="Hexo 7.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://img.shingyu.cn/pic.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://pan.shingyu.cn"><i class="fa-fw fa-solid fa-cloud"></i><span> 云盘资源</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 项目</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/projects/"><i class="fa-fw fas fa-list"></i><span> 项目列表</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://git.shingyu.cn"><i class="fa-fw fa-brands fa-git-alt"></i><span> 私有Git</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://txtd.shingyu.cn"><i class="fa-fw fas fa-book"></i><span> 网页小说下载器</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://img.shingyu.cn/zw1.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="星隅の小站"><img class="site-icon" src="https://img.shingyu.cn/favicon.png"/><span class="site-name">星隅の小站</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://pan.shingyu.cn"><i class="fa-fw fa-solid fa-cloud"></i><span> 云盘资源</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 项目</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/projects/"><i class="fa-fw fas fa-list"></i><span> 项目列表</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://git.shingyu.cn"><i class="fa-fw fa-brands fa-git-alt"></i><span> 私有Git</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://txtd.shingyu.cn"><i class="fa-fw fas fa-book"></i><span> 网页小说下载器</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">番茄下载器网页版v4版本部署教程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-06T16:00:00.000Z" title="发表于 2024-03-07 00:00:00">2024-03-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-06T16:14:11.455Z" title="更新于 2024-03-07 00:14:11">2024-03-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE/">我的项目</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%88%91%E7%9A%84%E9%A1%B9%E7%9B%AE/%E6%95%99%E7%A8%8B/">教程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="番茄下载器网页版v4版本部署教程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="番茄下载器网页版（API）v4版本部署教程"><a href="#番茄下载器网页版（API）v4版本部署教程" class="headerlink" title="番茄下载器网页版（API）v4版本部署教程"></a>番茄下载器网页版（API）v4版本部署教程</h1><p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/shing-yu/fanqie-downloader-api-v4">fanqie-downloader-api-v4</a></p>
+<p>此文章为以上项目的部署教程，包括Docker部署和直接部署两种方式</p>
+<p>右侧边栏可找到目录，点击跳转到对应章节</p>
+<h2 id="Docker部署（推荐）"><a href="#Docker部署（推荐）" class="headerlink" title="Docker部署（推荐）"></a>Docker部署（推荐）</h2><p>p.s. 如果镜像拉取缓慢，可参考 <a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/acr/user-guide/accelerate-the-pulls-of-docker-official-images">配置镜像加速器_容器镜像服务(ACR)-阿里云帮助中心 (aliyun.com)</a> 进行加速</p>
+<h3 id="无MySQL"><a href="#无MySQL" class="headerlink" title="无MySQL"></a>无MySQL</h3><p>如果你没有MySQL服务，或想新建一个，可以使用带有<code>mysql</code>或<code>latest</code>标签的docker镜像，容器内自带MySQL</p>
+<p>部署命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d \</span><br><span class="line">  -e MYSQL_ROOT_PASSWORD=123456 \</span><br><span class="line">  -v /opt/fdapiv4/mysql:/var/lib/mysql \</span><br><span class="line">  -v /opt/fdapiv4/config.json:/app/data/config.json \</span><br><span class="line">  -v /opt/fdapiv4/output:/app/data/output \</span><br><span class="line">  -v /opt/fdapiv4/logs:/app/logs \</span><br><span class="line">  -p 5000:5000 \</span><br><span class="line">  -p 3306:3306 \</span><br><span class="line">  --name fdapiv4 \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  shingyu/fanqie-downloader-api-v4:mysql</span><br></pre></td></tr></table></figure>
+
+<p><a href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"># 参数说明</a></p>
+<p>环境变量<code>MYSQL_ROOT_PASSWORD</code>的值将被设置为MySQL的root用户密码，可根据需要自行更改</p>
+<p>该密码需要手动填入配置文件<code>mysql.password</code>中</p>
+<p>挂载的源目录和配置文件路径及容器名称可根据需要与实际情况自行更改</p>
+<p>配置文件内容说明请看 <a href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"># 配置文件说明</a></p>
+<br>
+
+<h3 id="已有MySQL"><a href="#已有MySQL" class="headerlink" title="已有MySQL"></a>已有MySQL</h3><p>如果你已有部署完成的MySQL服务，可以使用带有<code>nomysql</code>标签的镜像</p>
+<p>部署命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d \</span><br><span class="line">  -v /opt/fdapiv4/config.json:/app/data/config.json \</span><br><span class="line">  -v /opt/fdapiv4/output:/app/data/output \</span><br><span class="line">  -v /opt/fdapiv4/logs:/app/logs \</span><br><span class="line">  -p 5000:5000 \</span><br><span class="line">  --name fdapiv4 \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  shingyu/fanqie-downloader-api-v4:nomysql</span><br></pre></td></tr></table></figure>
+
+<p><a href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"># 参数说明</a></p>
+<p><strong>对于已有的MySQL服务的信息，需要在配置文件内<code>mysql</code>字段中填入相关信息</strong></p>
+<p><strong>（如果服务在本地，请注意docker访问主机的相关配置！）</strong></p>
+<p>挂载的源目录和配置文件路径及容器名称可根据需要与实际情况自行更改</p>
+<p>配置文件内容说明请看 <a href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"># 配置文件说明</a></p>
+<br>
+
+<h3 id="容器管理命令"><a href="#容器管理命令" class="headerlink" title="容器管理命令"></a>容器管理命令</h3><ul>
+<li>启动</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker start fdapiv4</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>停止</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker stop fdapiv4</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重启</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker restart fdapiv4</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-d</td>
+<td>后台运行</td>
+</tr>
+<tr>
+<td>-e MYSQL_ROOT_PASSWORD&#x3D;123456</td>
+<td>设置MySQL初始密码，可自行修改</td>
+</tr>
+<tr>
+<td>-v &#x2F;opt&#x2F;fdapiv4&#x2F;mysql:&#x2F;var&#x2F;lib&#x2F;mysql</td>
+<td>挂载MySQL数据库信息</td>
+</tr>
+<tr>
+<td>-v &#x2F;opt&#x2F;fdapiv4&#x2F;config.json:&#x2F;app&#x2F;data&#x2F;config.json</td>
+<td>挂载程序配置文件</td>
+</tr>
+<tr>
+<td>-v &#x2F;opt&#x2F;fdapiv4&#x2F;output:&#x2F;app&#x2F;data&#x2F;output</td>
+<td>挂载程序输出目录</td>
+</tr>
+<tr>
+<td>-v &#x2F;opt&#x2F;fdapiv4&#x2F;logs:&#x2F;app&#x2F;logs</td>
+<td>挂载程序日志目录</td>
+</tr>
+<tr>
+<td>-p 5000:5000</td>
+<td>暴露程序端口</td>
+</tr>
+<tr>
+<td>-p 3306:3306</td>
+<td>暴露MySQL端口</td>
+</tr>
+<tr>
+<td>–name fdapiv4</td>
+<td>容器名称，可自行修改</td>
+</tr>
+<tr>
+<td>–restart unless-stopped</td>
+<td>随系统启动，非主动退出时重启</td>
+</tr>
+<tr>
+<td>shingyu&#x2F;fanqie-downloader-api-v4</td>
+<td>从docker hub拉取镜像</td>
+</tr>
+</tbody></table>
+<p>挂载参数和端口参数可根据需求与实际情况自行调整</p>
+<br>
+
+<h2 id="直接部署"><a href="#直接部署" class="headerlink" title="直接部署"></a>直接部署</h2><h3 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h3><ul>
+<li>Python 3.x （作者：3.11.5）</li>
+<li>pip包管理工具</li>
+<li>MySQL 5.x&#x2F;8.x（不一定本地，作者：8.0.36）</li>
+</ul>
+<h3 id="一、获取源代码"><a href="#一、获取源代码" class="headerlink" title="一、获取源代码"></a>一、获取源代码</h3><p><strong>使用Git Clone获取</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/shing-yu/fanqie-downloader-api-v4.git</span><br><span class="line"><span class="built_in">cd</span> fanqie-downloader-api-v4</span><br></pre></td></tr></table></figure>
+
+<p>或者：</p>
+<p><strong>下载压缩包</strong></p>
+<p>① 访问项目 GitHub 页面: <a target="_blank" rel="noopener" href="https://github.com/shing-yu/fanqie-downloader-api-v4">fanqie-downloader-api-v4</a><br>② 点击 “Clone or download” 按钮<br>③ 选择 “Download ZIP”<br>④ 解压下载的压缩包至你想要保存项目的目录<br>⑤ 在目录中打开终端</p>
+<br>
+
+<h3 id="二、创建虚拟环境（可选）"><a href="#二、创建虚拟环境（可选）" class="headerlink" title="二、创建虚拟环境（可选）"></a>二、创建虚拟环境（可选）</h3><p><strong>创建虚拟环境</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python -m venv venv</span><br><span class="line"><span class="comment"># python3 -m venv venv</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>激活虚拟环境</strong></p>
+<ul>
+<li>Windows:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">venv\Scripts\activate</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>MacOS&#x2F;Linux:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> venv/bin/activate</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="三、安装依赖并运行"><a href="#三、安装依赖并运行" class="headerlink" title="三、安装依赖并运行"></a>三、安装依赖并运行</h3><p><strong>使用pip安装依赖</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br><span class="line"><span class="comment"># pip3 install -r requirements.txt</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>按需修改配置文件</strong></p>
+<p>请参考 <a href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"># 配置文件说明</a></p>
+<br>
+
+<p><strong>运行项目：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python app.py</span><br><span class="line"><span class="comment"># python3 app.py</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h2 id="配置文件说明"><a href="#配置文件说明" class="headerlink" title="配置文件说明"></a>配置文件说明</h2><p>使用方式：复制&#x2F;下载<a target="_blank" rel="noopener" href="https://github.com/shing-yu/fanqie-downloader-api-v4/blob/main/config-example.json">config-example.json</a>文件，并重命名为config.json，然后修改为你自己的配置</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>wsgi</td>
+<td>是否使用了WSGI服务器（不同行为）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>reserve_proxy</td>
+<td>是否使用了反向代理（不同行为）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>cdn</td>
+<td>是否使用了CDN（不同行为）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>webui.enable</td>
+<td>是否启用Web用户界面</td>
+<td>true</td>
+</tr>
+<tr>
+<td>webui.download_url</td>
+<td>你的下载地址，用于引导用户前往下载</td>
+<td><a target="_blank" rel="noopener" href="https://example.com/">https://example.com/</a></td>
+</tr>
+<tr>
+<td>log.level</td>
+<td>日志文件记录级别</td>
+<td>DEBUG</td>
+</tr>
+<tr>
+<td>log.console_level</td>
+<td>控制台日志输出级别</td>
+<td>INFO</td>
+</tr>
+<tr>
+<td>log.filepath</td>
+<td>日志文件路径</td>
+<td>logs&#x2F;api.log</td>
+</tr>
+<tr>
+<td>log.maxSize</td>
+<td>日志文件最大大小</td>
+<td>20 MB</td>
+</tr>
+<tr>
+<td>log.backupCount</td>
+<td>日志文件备份数量</td>
+<td>20</td>
+</tr>
+<tr>
+<td>server.port</td>
+<td>服务器端口（docker部署无效）</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>server.host</td>
+<td>监听地址（docker部署无效）</td>
+<td>0.0.0.0</td>
+</tr>
+<tr>
+<td>server.debug</td>
+<td>是否启用调试模式</td>
+<td>false</td>
+</tr>
+<tr>
+<td>server.thread</td>
+<td>是否启用多线程模式</td>
+<td>false</td>
+</tr>
+<tr>
+<td>server.https.enable</td>
+<td>是否启用HTTPS</td>
+<td>false</td>
+</tr>
+<tr>
+<td>server.https.ssl_cert</td>
+<td>HTTPS SSL证书路径（启用需配置）</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>server.https.ssl_key</td>
+<td>HTTPS SSL密钥路径（启用需配置）</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>server.https.force_https</td>
+<td>是否强制使用HTTPS</td>
+<td>false</td>
+</tr>
+<tr>
+<td>mysql.host</td>
+<td>MySQL主机地址</td>
+<td>127.0.0.1</td>
+</tr>
+<tr>
+<td>mysql.port</td>
+<td>MySQL端口号</td>
+<td>3306</td>
+</tr>
+<tr>
+<td>mysql.user</td>
+<td>MySQL用户名</td>
+<td>root</td>
+</tr>
+<tr>
+<td>mysql.password</td>
+<td>MySQL密码</td>
+<td><em>空</em></td>
+</tr>
+<tr>
+<td>mysql.database</td>
+<td>MySQL数据库名称</td>
+<td>fanqieapi</td>
+</tr>
+<tr>
+<td>administrator.enable</td>
+<td>是否启用管理员接口</td>
+<td>false</td>
+</tr>
+<tr>
+<td>administrator.password</td>
+<td>管理员密码（启用需配置）</td>
+<td>L147258963oOOi</td>
+</tr>
+<tr>
+<td>administrator.totp.enable</td>
+<td>是否对管理行为二次验证</td>
+<td>false</td>
+</tr>
+<tr>
+<td>administrator.totp.secret</td>
+<td>双因素认证密钥（启用需配置）</td>
+<td><em>空</em></td>
+</tr>
+<tr>
+<td>administrator.enable_list_all_tasks</td>
+<td>是否允许列出所有任务</td>
+<td>false</td>
+</tr>
+<tr>
+<td>save_dir</td>
+<td>下载保存目录（docker部署无效）</td>
+<td>output</td>
+</tr>
+<tr>
+<td>encoding</td>
+<td>编码方式</td>
+<td>utf-8</td>
+</tr>
+<tr>
+<td>filename_format</td>
+<td>文件名格式</td>
+<td>{title}_{book_id}.txt</td>
+</tr>
+<tr>
+<td>speed_limit</td>
+<td>下载速度限制（最低0.25，单位秒）</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>time_range</td>
+<td>可用时间范围限制（如”8-18“）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>limiter.enable</td>
+<td>是否启用限速器</td>
+<td>true</td>
+</tr>
+<tr>
+<td>limiter.*.per_minute</td>
+<td>每分钟请求限制数量</td>
+<td></td>
+</tr>
+<tr>
+<td>limiter.*.per_hour</td>
+<td>每小时请求限制数量</td>
+<td></td>
+</tr>
+<tr>
+<td>limiter.*.per_day</td>
+<td>每日请求限制数量</td>
+<td></td>
+</tr>
+<tr>
+<td>upload.base_dir</td>
+<td>上传基础目录</td>
+<td>API&#x2F;小说</td>
+</tr>
+<tr>
+<td>upload.cos.enable</td>
+<td>是否启用腾讯云对象存储</td>
+<td>false</td>
+</tr>
+<tr>
+<td>upload.cos.secret_id</td>
+<td>腾讯云对象存储SecretId（启用需配置）</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>upload.cos.secret_key</td>
+<td>腾讯云对象存储SecretKey（启用需配置）</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>upload.cos.region</td>
+<td>腾讯云对象存储地区（启用需配置）</td>
+<td>ap-xxxxxxxx</td>
+</tr>
+<tr>
+<td>upload.cos.bucket</td>
+<td>腾讯云对象存储Bucket名称（启用需配置）</td>
+<td>xxx-0000000000</td>
+</tr>
+<tr>
+<td>upload.cos.scheme</td>
+<td>腾讯云对象存储访问协议</td>
+<td>https</td>
+</tr>
+<tr>
+<td>upload.cos.token</td>
+<td>腾讯云对象存储Token</td>
+<td>null</td>
+</tr>
+<tr>
+<td>upload.ofb.enable</td>
+<td>是否启用OneDrive for Business（未实现）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>upload.ofb.client_id</td>
+<td>OFB客户端ID（启用需配置）（未实现）</td>
+<td>your_client_id</td>
+</tr>
+<tr>
+<td>upload.ofb.client_secret</td>
+<td>OFB客户端密钥（启用需配置）（未实现）</td>
+<td>your_client_secret</td>
+</tr>
+<tr>
+<td>upload.ofb.tenant_id</td>
+<td>OFB租户ID（启用需配置）（未实现）</td>
+<td>your_tenant_id</td>
+</tr>
+<tr>
+<td>upload.ofb.endpoint</td>
+<td>上传端点路径（未实现）</td>
+<td>&#x2F;Documents&#x2F;</td>
+</tr>
+</tbody></table>
+<p>对于 <code>mysql.host</code> ，如果使用docker部署，请考虑使用IP地址代替主机名，否则可能由于DNS问题导致访问速度极慢报错。</p>
+<br>
+
+<p>默认配置文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;wsgi&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;reserve_proxy&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;cdn&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;webui&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;download_url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://example.com/&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;log&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;DEBUG&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;console_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;INFO&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;filepath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;logs/api.log&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;maxSize&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20 MB&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;backupCount&quot;</span><span class="punctuation">:</span> <span class="number">20</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">5000</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;host&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;debug&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;thread&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;https&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;ssl_cert&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;ssl_key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;force_https&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mysql&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;host&quot;</span><span class="punctuation">:</span> <span class="string">&quot;127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">3306</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="string">&quot;root&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;database&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fanqieapi&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;administrator&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;L147258963oOOi&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;totp&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;secret&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;enable_list_all_tasks&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;save_dir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;output&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;encoding&quot;</span><span class="punctuation">:</span> <span class="string">&quot;utf-8&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;filename_format&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;title&#125;_&#123;book_id&#125;.txt&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;speed_limit&quot;</span><span class="punctuation">:</span> <span class="number">0.5</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;time_range&quot;</span><span class="punctuation">:</span> <span class="string">&quot;false&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;limiter&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;api&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;per_minute&quot;</span><span class="punctuation">:</span> <span class="string">&quot;15&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;per_hour&quot;</span><span class="punctuation">:</span> <span class="string">&quot;200&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;per_day&quot;</span><span class="punctuation">:</span> <span class="string">&quot;300&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;list&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;per_minute&quot;</span><span class="punctuation">:</span> <span class="string">&quot;20&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;per_hour&quot;</span><span class="punctuation">:</span> <span class="string">&quot;200&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;per_day&quot;</span><span class="punctuation">:</span> <span class="string">&quot;500&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;download&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;per_minute&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;per_hour&quot;</span><span class="punctuation">:</span> <span class="string">&quot;100&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;per_day&quot;</span><span class="punctuation">:</span> <span class="string">&quot;300&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;upload&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;base_dir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;API/小说&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;cos&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;secret_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;secret_key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ap-xxxxxxxx&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;bucket&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xxx-0000000000&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;scheme&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ofb&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;comment&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OneDrive for Business&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;client_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;your_client_id&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;client_secret&quot;</span><span class="punctuation">:</span> <span class="string">&quot;your_client_secret&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;tenant_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;your_tenant_id&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;endpoint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/Documents/&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://www.shingyu.cn">星隅</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://www.shingyu.cn/posts/b4de337aa505/">https://www.shingyu.cn/posts/b4de337aa505/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.shingyu.cn" target="_blank">星隅の小站</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/">教程</a><a class="post-meta__tags" href="/tags/Docker/">Docker</a><a class="post-meta__tags" href="/tags/%E5%B0%8F%E8%AF%B4/">小说</a><a class="post-meta__tags" href="/tags/%E9%83%A8%E7%BD%B2/">部署</a><a class="post-meta__tags" href="/tags/txt/">txt</a><a class="post-meta__tags" href="/tags/%E9%98%85%E8%AF%BB/">阅读</a><a class="post-meta__tags" href="/tags/%E8%87%AA%E5%88%B6%E9%A1%B9%E7%9B%AE/">自制项目</a><a class="post-meta__tags" href="/tags/Python/">Python</a><a class="post-meta__tags" href="/tags/Flask/">Flask</a></div><div class="post_share"><div class="social-share" data-image="https://img.shingyu.cn/zw1.jpg" data-sites="wechat,weibo,qq,facebook,twitter"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/5af885c0c7f7/" title="记一次Docker安装MySQL的踩坑记录"><img class="cover" src="https://img.shingyu.cn/zw1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">记一次Docker安装MySQL的踩坑记录</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/073aa51231be/" title="虚拟摄像头教程（简易）"><img class="cover" src="https://img.shingyu.cn/OBS.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-29</div><div class="title">虚拟摄像头教程（简易）</div></div></a></div><div><a href="/posts/5af885c0c7f7/" title="记一次Docker安装MySQL的踩坑记录"><img class="cover" src="https://img.shingyu.cn/zw1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-05</div><div class="title">记一次Docker安装MySQL的踩坑记录</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://img.shingyu.cn/pic.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">星隅</div><div class="author-info__description">立春天，风渐暖，伊人一去不复返</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">22</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/1920711824"><i class="fa-brands fa-bilibili"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/shing-yu" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://space.bilibili.com/1920711824" target="_blank" title="哔哩哔哩"><i class="fa-brands fa-bilibili"></i></a><a class="social-icon" href="mailto:xing_yv@outlook.com" target="_blank" title="电子邮箱"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://discordapp.com/users/1048935506957828216" target="_blank" title="Discord个人资料"><i class="fa-brands fa-discord"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站经过长时间搁置，即将在最近开始正常运营！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%95%AA%E8%8C%84%E4%B8%8B%E8%BD%BD%E5%99%A8%E7%BD%91%E9%A1%B5%E7%89%88%EF%BC%88API%EF%BC%89v4%E7%89%88%E6%9C%AC%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B"><span class="toc-text">番茄下载器网页版（API）v4版本部署教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker%E9%83%A8%E7%BD%B2%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-text">Docker部署（推荐）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0MySQL"><span class="toc-text">无MySQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%B2%E6%9C%89MySQL"><span class="toc-text">已有MySQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-text">容器管理命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">参数说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E9%83%A8%E7%BD%B2"><span class="toc-text">直接部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="toc-text">环境要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%8E%B7%E5%8F%96%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-text">一、获取源代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">二、创建虚拟环境（可选）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E5%B9%B6%E8%BF%90%E8%A1%8C"><span class="toc-text">三、安装依赖并运行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-text">配置文件说明</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/b4de337aa505/" title="番茄下载器网页版v4版本部署教程"><img src="https://img.shingyu.cn/zw1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="番茄下载器网页版v4版本部署教程"/></a><div class="content"><a class="title" href="/posts/b4de337aa505/" title="番茄下载器网页版v4版本部署教程">番茄下载器网页版v4版本部署教程</a><time datetime="2024-03-06T16:00:00.000Z" title="发表于 2024-03-07 00:00:00">2024-03-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/5af885c0c7f7/" title="记一次Docker安装MySQL的踩坑记录"><img src="https://img.shingyu.cn/zw1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="记一次Docker安装MySQL的踩坑记录"/></a><div class="content"><a class="title" href="/posts/5af885c0c7f7/" title="记一次Docker安装MySQL的踩坑记录">记一次Docker安装MySQL的踩坑记录</a><time datetime="2024-03-04T16:00:00.000Z" title="发表于 2024-03-05 00:00:00">2024-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/37408b099e2f/" title="ARP欺骗攻击的理论与实践"><img src="https://img.shingyu.cn/Cover_ARP.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ARP欺骗攻击的理论与实践"/></a><div class="content"><a class="title" href="/posts/37408b099e2f/" title="ARP欺骗攻击的理论与实践">ARP欺骗攻击的理论与实践</a><time datetime="2022-10-29T16:00:00.000Z" title="发表于 2022-10-30 00:00:00">2022-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/073aa51231be/" title="虚拟摄像头教程（简易）"><img src="https://img.shingyu.cn/OBS.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟摄像头教程（简易）"/></a><div class="content"><a class="title" href="/posts/073aa51231be/" title="虚拟摄像头教程（简易）">虚拟摄像头教程（简易）</a><time datetime="2022-10-28T16:00:00.000Z" title="发表于 2022-10-29 00:00:00">2022-10-29</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://img.shingyu.cn/zw1.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 星隅</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a href="https://beian.miit.gov.cn/" target="_blank">豫ICP备2024044074号</a> <p style="display: inline;"> | </p> <a href="https://icp.gov.moe/?keyword=20241229" target="_blank">萌ICP备20241229号</a> <br> <a href="https://beian.mps.gov.cn/#/query/webSearch?code=41042302000206" rel="noreferrer" target="_blank">豫公网安备41042302000206号</a>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><script>(() => {
+  const initWaline = () => {
+    const waline = Waline.init(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline.shingyu.tech/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, {"requiredMeta":["nick","mail"],"locale":{"placeholder":"1.昵称和邮箱为必填项。\n2.在昵称中使用QQ号或使用QQ邮箱，可以自动匹配头像哦~\n3.邮箱用于接收回复提醒，不会公开；如果您没有收到邮件通知，请检查邮箱的垃圾邮件。\n4.每分钟只能发送一次评论哦~"}}))
+
+    const destroyWaline = () => {
+      waline.destroy()
+    }
+
+    btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
+
+  }
+
+  const loadWaline = async () => {
+    if (typeof Waline === 'object') initWaline()
+    else {
+      await getCSS('/pluginsSrc/@waline/client/dist/waline.css')
+      await getScript('/pluginsSrc/@waline/client/dist/waline.js')
+      initWaline()
+    }
+  }
+
+  if ('Waline' === 'Waline' || !true) {
+    if (true) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-2" mobile="true" data-click="true"></script><script id="canvas_nest" defer="defer" color="0,0,0" opacity="0.9" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
